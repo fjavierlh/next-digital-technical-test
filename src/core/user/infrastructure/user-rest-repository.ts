@@ -18,4 +18,27 @@ export class UserRestRepository implements UserRepository {
       todoListIds: [],
     }));
   }
+
+  async byId(userId: string): Promise<User | null> {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    const userData: UserDTO = await response.json();
+
+    return {
+      id: String(userData.id),
+      name: userData.name,
+      email: userData.email,
+      city: userData.address.city,
+      website: userData.website,
+      company: userData.company?.name,
+      albumIds: [],
+      todoListIds: [],
+    };
+  }
 }
