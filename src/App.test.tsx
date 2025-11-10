@@ -1,9 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 import { MockWebServer } from "./test/mock-web-server";
 import { usersDTOMock } from "./core/user/infrastructure/user.dto.mock";
+import { AppRoutes } from "./core/shared/ui/routes";
+import { MemoryRouter } from "react-router-dom";
 
 const mockWebServer = new MockWebServer();
 
@@ -47,7 +49,23 @@ export const QueryClientWrapper = ({ children }: PropsWithChildren) => {
     },
   });
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <RouterWrapper>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </RouterWrapper>
+  );
+};
+
+type RouterWrapperProps = {
+  children?: ReactNode;
+  initialEntries?: string[];
+};
+
+export const RouterWrapper = ({
+  children = <AppRoutes />,
+  initialEntries = ["/"],
+}: RouterWrapperProps) => {
+  return (
+    <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
   );
 };
 
