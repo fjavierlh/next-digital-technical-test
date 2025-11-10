@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./App.css";
 import { useQueryAllUsers } from "./core/user/ui/hooks/useQueryAllUsers";
 
@@ -8,7 +9,11 @@ function App() {
     <ul>
       {isLoading
         ? "Loading..."
-        : users?.map((user) => <li key={user.id}>{user.name}</li>)}
+        : users?.map((user) => (
+            <Link to={`/user/${user.id}`} key={user.id}>
+              <li key={user.id}>{user.name}</li>
+            </Link>
+          ))}
     </ul>
   );
 }
